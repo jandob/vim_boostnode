@@ -12,12 +12,15 @@ if !exists("main_syntax")
   let main_syntax = 'tpl'
 endif
 if !empty(expand('%:r:e'))
-  echom 'loading other syntax'
   execute 'runtime! syntax/'.expand('%:r:e').'.vim'
   unlet b:current_syntax
   execute 'syntax include @Main syntax/'.expand('%:r:e').'.vim'
+  unlet b:current_syntax
+  syntax include @Python syntax/python.vim
+  syntax region Python matchgroup=Snip start="<%" end="$" contains=@Python containedin=@Main
+  hi link Snip SpecialComment
+else
+  syntax include @Python syntax/python.vim
+  syntax region Python matchgroup=Snip start="<%" end="$" contains=@Python
+  hi link Snip SpecialComment
 endif
-unlet b:current_syntax
-syntax include @Python syntax/python.vim
-syntax region Python matchgroup=Snip start="<%" end="$" contains=@Python containedin=@Main
-hi link Snip SpecialComment
